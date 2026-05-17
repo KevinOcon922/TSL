@@ -444,8 +444,8 @@ int main(int argc, char* argv[]){
     //Step 2: Transpile the tokens into a C++ program
     std::ofstream outputFile(fileName.substr(0, fileName.find(".")) + ".cpp");
 
-    outputFile<<"#include <vector>\n#include <string>\n#include <iostream>\n";
-    outputFile<<"std::string currentState = \"MANUAL\";\nstd::vector<char> tape(10000, '#');\nint head = 5000;\nstd::vector<std::vector<std::string>> transitions;\nstd::vector<std::vector<std::string>> states;\nint farthestLeft = 5000;\nint farthestRight = 5000;\nstd::string input = \"\";\nchar status;\n";
+    outputFile<<"#include <vector>\n#include <string>\n#include <iostream>\n#include <unordered_map>\n";
+    outputFile<<"std::string currentState = \"MANUAL\";\nstd::vector<char> tape(10000, '#');\nint head = 5000;\nstd::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::string>>> transitions;\nstd::unordered_map<std::string, std::string> states;\nint farthestLeft = 5000;\nint farthestRight = 5000;\nstd::string input = \"\";\nchar status;\n";
     outputFile<<"void Right();\nvoid Left();\nvoid Write(char symbol);\nvoid Accept();\nvoid Reject();\nvoid Print();\n";
     outputFile<<"void AddTransition(std::string currentState, std::string tapeSymbol, std::string placeSymbol, std::string moveSymbol, std::string nextState);\n";
     outputFile<<"void AddState(std::string stateName, std::string stateType);\nstd::vector<std::string> GetTransition(std::string state, std::string tapeSymbol);\nchar GetStateChar(std::string state);\nchar ExecuteTransitionMode();\n";
@@ -512,10 +512,10 @@ int main(int argc, char* argv[]){
     outputFile<<"void Reject(){\nstd::cout<<\"Input \"<<input<<\" rejected\"<<std::endl;\n}\n";
     outputFile<<"void Print(){\nstd::cout<<\"Tape output:\"<<std::endl<<\"#\";\nfor(int i = farthestLeft; i <= farthestRight; i++){\nstd::cout<<tape[i];\n}\nstd::cout<<\"#\"<<std::endl;\n}\n";
     outputFile<<"void AddTransition(std::string currentState, std::string tapeSymbol, std::string placeSymbol, std::string moveSymbol, std::string nextState){\nstd::vector<std::string> newTransition;\nnewTransition.push_back(currentState);\n";
-    outputFile<<"newTransition.push_back(tapeSymbol);\nnewTransition.push_back(placeSymbol);\nnewTransition.push_back(moveSymbol);\nnewTransition.push_back(nextState);\ntransitions.push_back(newTransition);\n}\n";
-    outputFile<<"void AddState(std::string stateName, std::string stateType){\nstd::vector<std::string> newState;\nnewState.push_back(stateName);\nnewState.push_back(stateType);\nstates.push_back(newState);\n}\n";
-    outputFile<<"std::vector<std::string> GetTransition(std::string state, std::string tapeSymbol){\nstd::vector<std::string> transition;\nfor(int i = 0; i < transitions.size(); i++){\nif(transitions[i][0] == state && transitions[i][1] == tapeSymbol){\ntransition = transitions[i];\n}\n}\nreturn transition;\n}\n";
-    outputFile<<"char GetStateChar(std::string state){\nchar stateChar = 'N';\nfor(int i = 0; i < states.size(); i++){\nif(states[i][0] == state){\nstateChar = states[i][1][0];\nbreak;\n}\n}\nreturn stateChar;\n}\n";
+    outputFile<<"newTransition.push_back(tapeSymbol);\nnewTransition.push_back(placeSymbol);\nnewTransition.push_back(moveSymbol);\nnewTransition.push_back(nextState);\ntransitions[currentState][tapeSymbol] = newTransition;\n}\n";
+    outputFile<<"void AddState(std::string stateName, std::string stateType){\nstates[stateName] = stateType;\n}\n";
+    outputFile<<"std::vector<std::string> GetTransition(std::string state, std::string tapeSymbol){\nreturn transitions[state][tapeSymbol];\n}\n";
+    outputFile<<"char GetStateChar(std::string state){\nreturn states[state][0];\n}\n";
     outputFile<<"char ExecuteTransitionMode(){\nchar statusChar;\nwhile(true){\nstd::vector<std::string> transition = GetTransition(currentState, std::string(1, tape[head]));\n";
     outputFile<<"if(transition.size() == 0){\nif(GetStateChar(currentState) == 'F' || GetStateChar(currentState) == 'A'){\nAccept();\nstatusChar = 'A';\nbreak;\n}\nelse{\nReject();\nstatusChar = 'R';\nbreak;\n}\n}\ncurrentState = transition[4];\nWrite(transition[2][0]);\nif(transition[3] == \"R\"){\nRight();\n} else if(transition[3] == \"L\"){\nLeft();\n}\n";
     outputFile<<"if(currentState == \"MANUAL\"){\nstatusChar = 'M';\nbreak;\n}\nchar stateChar = GetStateChar(currentState);\n";
@@ -525,7 +525,7 @@ int main(int argc, char* argv[]){
     outputFile.close();
 
     std::system(("g++ " + fileName.substr(0, fileName.find(".")) + ".cpp -o " + fileName.substr(0, fileName.find("."))).c_str());
-    //std::system(("rm -rf " + fileName.substr(0, fileName.find(".")) + ".cpp").c_str());
+    std::system(("rm -rf " + fileName.substr(0, fileName.find(".")) + ".cpp").c_str());
 
     return 0;
 }
