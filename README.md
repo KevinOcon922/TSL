@@ -19,7 +19,11 @@ An example command used to run a TSL program called program.TSL is:
 
 followed by:  
 
-./program.TSL input
+./program.TSL input  
+
+Note that 'input' is a sequence of characters that will be loaded onto the tape. The tape head starts at the first symbol in the input.  
+In most of the example programs, the input is expected to be a string containing only a's and b's. The only exceptions are invert.TSL, which expects a binary input,  
+and HelloWorld.TSL, which doesn't operate on input.
 
 # Example Programs
 This repository contains 5 example programs under the ExampleProgram folder showcasing some of the different features and uses of TSL.  
