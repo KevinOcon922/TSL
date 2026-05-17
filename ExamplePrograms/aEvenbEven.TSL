@@ -1,0 +1,18 @@
+DEF STATE AevenBeven: F
+DEF STATE AoddBeven: N
+DEF STATE AevenBodd: N
+DEF STATE AoddBodd: N
+
+DEF TRANSITION: AevenBeven, a, a, R, AoddBeven
+DEF TRANSITION: AevenBeven, b, b, R, AevenBodd
+
+DEF TRANSITION: AoddBeven, a, a, R, AevenBeven
+DEF TRANSITION: AoddBeven, b, b, R, AoddBodd
+
+DEF TRANSITION: AevenBodd, a, a, R, AoddBeven
+DEF TRANSITION: AevenBodd, b, b, R, AevenBeven
+
+DEF TRANSITION: AoddBodd, a, a, R, AevenBodd
+DEF TRANSITION: AoddBodd, b, b, R, AoddBeven
+
+STATE AevenBeven

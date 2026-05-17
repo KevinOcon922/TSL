@@ -1,0 +1,27 @@
+# This program prints out Hello-World on the tape
+# This is not the type of program this language is intended for, which is why the syntax does not look nice
+# WRITE puts the given character on the current space in the tape, then R moves the tape head right
+
+WRITE H
+R
+WRITE E
+R
+WRITE L
+R
+WRITE L
+R
+WRITE O
+R
+WRITE -
+R
+WRITE W
+R
+WRITE O
+R
+WRITE R
+R
+WRITE L
+R
+WRITE D
+
+PRINT

@@ -1,0 +1,16 @@
+# A transducer is a Turing Machine that transforms some input into another form
+# This transducer takes in a binary input and flips every bit for the output
+
+UNTIL # {
+    IF 0 {
+        WRITE 1
+    }
+    ELSE {
+        IF 1{
+            WRITE 0
+        }
+    }
+    R
+}
+
+PRINT

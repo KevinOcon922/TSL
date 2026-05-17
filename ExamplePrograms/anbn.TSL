@@ -1,0 +1,32 @@
+# This program accepts the language a^n * b^n such that n >= 1
+# An easy modification to make it work for n >= 0 would be to add a transition to state A
+# that jumps to a final state if a blank (#) is read
+
+# State A searches for the next available a on the input tape, marks it as seen, then transitions to state B
+DEF STATE A: N
+# State B searches for the first available b on the input tape, marks it as seen, then transitions to state LEFT
+DEF STATE B: N
+# State LEFT travels left along the tape until an X (marked a) is found. Then, it transitions to state A
+DEF STATE LEFT: N
+# State FINAL signifies that the input was accepted
+DEF STATE FINAL: A
+# State VERIFY is only transitioned to when state A reaches an O (marked B). At this point, the machine traverses left, verifying that there are only
+# O's on the right half of the input. If it reaches a blank, that means the input is accepted
+DEF STATE VERIFY: N
+
+DEF TRANSITION: A, a, X, R, B
+DEF TRANSITION: A, X, X, R, A
+DEF TRANSITION: A, O, O, R, VERIFY
+
+DEF TRANSITION: B, a, a, R, B
+DEF TRANSITION: B, b, O, L, LEFT
+DEF TRANSITION: B, O, O, R, B
+
+DEF TRANSITION: LEFT, O, O, L, LEFT
+DEF TRANSITION: LEFT, a, a, L, LEFT
+DEF TRANSITION: LEFT, X, X, R, A
+
+DEF TRANSITION: VERIFY, O, O, R, VERIFY
+DEF TRANSITION: VERIFY, #, #, R, FINAL
+
+STATE A
