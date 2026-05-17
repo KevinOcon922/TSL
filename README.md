@@ -10,7 +10,7 @@ Currently, TSL only works in a terminal environment that supports linux commands
 ## Running
 The TSL compiler requires no extra dependencies. So, after cloning the repository, the compiler can be compiled using a command such as:  
 
-g++ compiler.cpp compile  
+g++ compiler.cpp -o compile  
 
 The 'compile' executable takes as an argument the name of the TSL file you wish to compile (including the extension)  
 An example command used to run a TSL program called program.TSL is:  
