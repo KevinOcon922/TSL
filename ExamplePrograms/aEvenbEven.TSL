@@ -9,7 +9,7 @@ DEF TRANSITION: AevenBeven, b, b, R, AevenBodd
 DEF TRANSITION: AoddBeven, a, a, R, AevenBeven
 DEF TRANSITION: AoddBeven, b, b, R, AoddBodd
 
-DEF TRANSITION: AevenBodd, a, a, R, AoddBeven
+DEF TRANSITION: AevenBodd, a, a, R, AoddBodd
 DEF TRANSITION: AevenBodd, b, b, R, AevenBeven
 
 DEF TRANSITION: AoddBodd, a, a, R, AevenBodd

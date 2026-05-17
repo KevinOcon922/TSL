@@ -1,0 +1,23 @@
+# This program accepts all inputs of the form ba*b (b followed by any number of a's followed by b)
+# This could easily be written using Transition mode, however, this program is meant to demonstrate how an acceptor would work using Manual mode
+# This machine assumes the input alphabet consists of only a's and b's
+
+IF a {
+    REJECT
+}
+
+R
+WHILE a {
+    R
+}
+
+IF # {
+    REJECT
+}
+
+R
+IF # {
+    ACCEPT
+} ELSE {
+    REJECT
+}

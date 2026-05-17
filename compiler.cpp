@@ -125,11 +125,29 @@ int main(int argc, char* argv[]){
                 tokens.push_back("FOREVER");
             }
         } else if(line[0] == '{' || line[0] == '}'){
-            if(line.size() != 1){
+            if(line[0] == '{' && line.size() != 1){
                 std::cout<<"Error at line "<<lineCounter<<": Nothing should follow a { on the same line"<<std::endl;
                 return 1;
             }
-            tokens.push_back(line);
+            tokens.push_back(std::string(1, line[0]));
+            if(line[0] == '}'){
+                if(line.size() == 1){
+                    continue;
+                } else if(line.size() == 5 || line.size() == 6){
+                    if(line.substr(1, 4) != "ELSE"){
+                        std::cout<<"Error at line "<<lineCounter<<": The only thing that may follow a } is 'ELSE' or 'ELSE {'"<<std::endl;
+                        return 1;
+                    }
+                    tokens.push_back("ELSE");
+                    if(line.size() == 6){
+                        if(line.substr(5, 1) != "{"){
+                            std::cout<<"Error at line "<<lineCounter<<": The only thing that may follow '} ELSE' is '{'"<<std::endl;
+                            return 1;
+                        }
+                        tokens.push_back("{");
+                    }
+                }
+            }
         } else if(line[0] == 'I'){
             if(!(line.size() == 3 || line.size() == 4) || line[1] != 'F'){
                 std::cout<<"Error at line "<<lineCounter<<": Invalid command. Did you mean IF <SYMBOL>?"<<std::endl;
@@ -261,7 +279,7 @@ int main(int argc, char* argv[]){
                 }
 
                 if(!endFound){
-                    std::cout<<"Error at line "<<lineCounter<<": Terminating character : not found after name decleration"<<std::endl;
+                    std::cout<<"Error at line "<<lineCounter<<": Terminating character : not found after name declaration"<<std::endl;
                     return 1;
                 }
                 if(nameString.size() == 0){
@@ -371,6 +389,10 @@ int main(int argc, char* argv[]){
                 std::cout<<"Error at line "<<lineCounter<<": Invalid command, did you mean ELSE? (Note that IF ELSE statements are not supported)"<<std::endl;
                 return 1;
             }
+            if(tokens[tokens.size() - 1] != '}'){
+                std::cout<<"Error at line "<<lineCounter<<": An ELSE statement may only follow the closing curly bracket of an IF statement"<<std::endl;
+                return 1;
+            }
             tokens.push_back("ELSE");
             if(line.size() == 5){
                 if(line[4] != '{'){
@@ -388,6 +410,10 @@ int main(int argc, char* argv[]){
     }
     file.close();
 
+    for(int i = 0; i < tokens.size(); i++){
+        std::cout<<tokens[i]<<std::endl;
+    }
+
     std::stack<char> bracketStack;
     for(int i = 0; i < tokens.size(); i++){
         if(tokens[i] == "{"){
@@ -398,9 +424,7 @@ int main(int argc, char* argv[]){
                 return 1;
             }
             bracketStack.pop();
-        }
-
-        if(tokens[i] == "REPEAT"){
+        } else if(tokens[i] == "REPEAT"){
             if(i + 1 == tokens.size()){
                 std::cout<<"Error: REPEAT or IF at end of file without a block statement"<<std::endl;
                 return 1;
@@ -411,9 +435,7 @@ int main(int argc, char* argv[]){
                     return 1;
                 }
             }
-        }
-
-        if(tokens[i] == "WHILE"){
+        } else if(tokens[i] == "WHILE"){
             if(i + 1 == tokens.size()){
                 std::cout<<"Error: WHILE at end of file without a block statement"<<std::endl;
                 return 1;
@@ -422,9 +444,7 @@ int main(int argc, char* argv[]){
                 std::cout<<"Error: WHILE not followed my a block statement {}"<<std::endl;
                 return 1;
             }
-        }
-
-        if(tokens[i] == "UNTIL"){
+        } else if(tokens[i] == "UNTIL"){
             if(i + 1 == tokens.size()){
                 std::cout<<"Error: UNTIL at end of file without a block statement"<<std::endl;
                 return 1;
@@ -433,6 +453,11 @@ int main(int argc, char* argv[]){
                 std::cout<<"Error: WHILE not followed my a block statement {}"<<std::endl;
                 return 1;
             }
+        } else if(tokens[i] == "ELSE"){
+            std::stack<std::string> elseStack;
+            elseStack.push_back("}");
+
+            for(int i = )
         }
     }
     if(!bracketStack.empty()){
@@ -476,7 +501,7 @@ int main(int argc, char* argv[]){
         } else if(tokens[i] == "ACCEPT"){
             outputFile<<"Accept();\nreturn 0;\n";
         } else if(tokens[i] == "REJECT"){
-            outputFile<<"Reject();\nreturn0;\n";
+            outputFile<<"Reject();\nreturn 0;\n";
         } else if(tokens[i] == "PRINT"){
             outputFile<<"Print();\nreturn 0;\n";
         } else if(tokens[i] == "WHILE"){

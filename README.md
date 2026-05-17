@@ -34,7 +34,7 @@ TSL simulates the operations of a Turing Machine. Every command in this language
 The tape is accessed via a head which can be moved left and right and be used to write to the tape. The value pointed at by the head can also be used for control flow.  
 
 In terms of syntax, the language uses newlines as a delimiter between instructions and curly braces to mark code blocks for loops and conditionals.  
-The # symbol is used to denote a blank space on the tape. The tape is filled with
+The # symbol is used to denote a blank space on the tape. The tape is filled with these symbols by default.
 
 ## Modes
 TSL has two modes. The first mode is Manual execution mode. In Manual mode, the tape head is controlled manually using the regular top to bottom execution and  
