@@ -389,7 +389,7 @@ int main(int argc, char* argv[]){
                 std::cout<<"Error at line "<<lineCounter<<": Invalid command, did you mean ELSE? (Note that IF ELSE statements are not supported)"<<std::endl;
                 return 1;
             }
-            if(tokens[tokens.size() - 1] != '}'){
+            if(tokens[tokens.size() - 1] != "}"){
                 std::cout<<"Error at line "<<lineCounter<<": An ELSE statement may only follow the closing curly bracket of an IF statement"<<std::endl;
                 return 1;
             }
@@ -409,10 +409,6 @@ int main(int argc, char* argv[]){
         lineCounter++;
     }
     file.close();
-
-    for(int i = 0; i < tokens.size(); i++){
-        std::cout<<tokens[i]<<std::endl;
-    }
 
     std::stack<char> bracketStack;
     for(int i = 0; i < tokens.size(); i++){
@@ -455,9 +451,22 @@ int main(int argc, char* argv[]){
             }
         } else if(tokens[i] == "ELSE"){
             std::stack<std::string> elseStack;
-            elseStack.push_back("}");
+            elseStack.push("}");
 
-            for(int i = )
+            for(int j = i - 2; j >= 0; j--){
+                if(tokens[j] == "}"){
+                    elseStack.push("}");
+                } else if(tokens[j] == "{"){
+                    elseStack.pop();
+                    if(elseStack.empty()){
+                        if(tokens[j - 2] != "IF"){
+                            std::cout<<"Error: ELSE statement does not follow the closing block of an IF statement"<<std::endl;
+                            return 1;
+                        }
+                        break;
+                    }
+                }
+            }
         }
     }
     if(!bracketStack.empty()){
@@ -551,6 +560,7 @@ int main(int argc, char* argv[]){
 
     std::system(("g++ " + fileName.substr(0, fileName.find(".")) + ".cpp -o " + fileName.substr(0, fileName.find("."))).c_str());
     std::system(("rm -rf " + fileName.substr(0, fileName.find(".")) + ".cpp").c_str());
+    std::cout<<"Program sucessfully compiled. Use ./"<<fileName.substr(0, fileName.find("."))<<" <input OPTIONAL> to run"<<std::endl;
 
     return 0;
 }
