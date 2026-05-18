@@ -1,0 +1,58 @@
+# This program accepts input string of the form a^n b^n c^n (the same number of a's followed by the same number of b's followed by the same number of c's)
+# The input alphabet are the characters a, b, c
+
+# State definitions
+DEF STATE A: N
+DEF STATE B: N
+DEF STATE C: N
+DEF STATE LEFT: N
+DEF STATE CHECKC: N
+DEF STATE CHECKB: N
+DEF STATE CHECKA: N
+DEF STATE FINAL: F
+
+# Find the leftmost a, replace it with an A, then transition to state B
+# There are transitions here for the other character replacements so that the machine can reach the end of the input in state A before checking if the
+# characters are in order using state CHECKC. We only want the machine to reach the end of the input in this state because it means that there was the same
+# number of a's, b's, and c's
+DEF TRANSITION: A, a, A, R, B
+DEF TRANSITION: A, A, A, R, A
+DEF TRANSITION: A, B, B, R, A
+DEF TRANSITION: A, C, C, R, A
+DEF TRANSITION: A, #, #, L, CHECKC
+
+# Find the leftmost b, replace it with a A, then transition to state C
+DEF TRANSITION: B, b, B, R, C
+DEF TRANSITION: B, B, B, R, B
+DEF TRANSITION: B, a, a, R, B
+
+# Find the leftmost c, replace it with a C, then transition to state LEFt
+DEF TRANSITION: C, c, C, L, LEFT
+DEF TRANSITION: C, C, C, R, C
+DEF TRANSITION: C, b, b, R, C
+
+# Return to the beginning of the input
+DEF TRANSITION: LEFT, a, a, L, LEFT
+DEF TRANSITION: LEFT, b, b, L, LEFT
+DEF TRANSITION: LEFT, c, c, L, LEFT
+DEF TRANSITION: LEFT, A, A, L, LEFT
+DEF TRANSITION: LEFT, B, B, L, LEFT
+DEF TRANSITION: LEFT, C, C, L, LEFT
+DEF TRANSITION: LEFT, #, #, R, A
+
+# Verify there are only C's in this section
+# When the first B is read, switch to state CHECKB
+DEF TRANSITION: CHECKC, C, C, L, CHECKC
+DEF TRANSITION: CHECKC, B, B, L, CHECKB
+
+# Verify there are only B's in this section
+# When the first A is read, switch to state CHECKA
+DEF TRANSITION: CHECKB, B, B, L, CHECKB
+DEF TRANSITION: CHECKB, A, A, L, CHECKA
+
+# Verify there are only A's in this section
+# When a blank is read, the end of the input has been reached and all of the characters were in order, so accept the input in state FINAL
+DEF TRANSITION: CHECKA, A, A, L, CHECKA
+DEF TRANSITION: CHECKA, #, #, R, FINAL
+
+STATE A
