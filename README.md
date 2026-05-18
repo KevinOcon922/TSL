@@ -5,7 +5,7 @@ and TRANSITION mode, which uses the formal mathematical defintition of a TM foun
 based on transition functions.
 
 # Setting Up
-## Reequirements
+## Requirements
 Currently, TSL only works in a terminal environment that supports linux commands. On Windows, common options include MSYS2, UCRT64, or WSL.
 ## Running
 The TSL compiler requires no extra dependencies. So, after cloning the repository, the compiler can be compiled using a command such as:  
